@@ -7,8 +7,8 @@
 
 class Task
 {
-  protected array $a;
-  protected int   $k;
+  private array $a;
+  private int   $k;
 
   /**
    * Initial Data
