@@ -1,2 +1,6 @@
 # technical-task-Telecoma
-  Terms of reference for selection for employment in a Telecom company
+Hello Pls open file `index.php` and click Start in your IDE.
+
+:-) Artysho Andrey (Fulliton)
+
+MIT
