@@ -36,7 +36,7 @@ class Task
     return $this;
   }
 
-  public function result (){
+  public function result (): int {
     $count = count($this->a) - 1;
     if ($count <= $this->k * 2) {
       return $this->resultold();
