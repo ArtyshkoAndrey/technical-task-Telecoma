@@ -26,17 +26,35 @@ class Task
    * @throws ArithmeticError
    */
   public function clearArray (): Task {
-    $this->a = array_filter($this->a, static function ($item) {
+    $this->a = array_values(array_filter($this->a, static function ($item) {
       if (!is_int($item)) {
         throw new ArithmeticError('Ошибка ввода данных массива');
       }
       return !($item % 2);
-    });
+    }));
 
     return $this;
   }
 
-  public function result(): int {
+  public function result (){
+    $count = count($this->a) - 1;
+    if ($count <= $this->k * 2) {
+      return $this->resultold();
+    }
+
+    $maxArray = $this->a;
+    while (($count = ceil($count / 2)) >= $this->k) {
+      [$left, $right] = array_chunk($maxArray, ceil(count($maxArray) / 2));
+      if (count($right) - 1 < $this->k) {
+        $right[] += end($left);
+      }
+      $maxArray = array_sum($left) > array_sum($right) ? $left : $right;
+    }
+    $this->a = $maxArray;
+    return $this->resultOld();
+  }
+
+  public function resultOld(): int {
     $arraySum = [];
     $i = 0;
 
@@ -68,12 +86,11 @@ class Task
 }
 
 //  $task = new Task([
-//      '1', 3, 2, 7, 8, 9, 10, 12, 15
+//    22, 3, 2, 7, 8, 9, 10, 12, 15
 //  ], 3);
-
-  $task = new Task([
-    22, 3, 2, 7, 8, 9, 10, 12, 15
-  ], 3);
+//var_dump(range(0, 1000, 1));
+  $task = new Task(
+    range(0, 100000, 1), 500);
 
   try {
     $answer = $task->clearArray()
