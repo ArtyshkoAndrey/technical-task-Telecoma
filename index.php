@@ -19,7 +19,7 @@ class Task
   }
 
   /**
-   * O(n) + O(n log2 n) Скорось работы аолгоритма. Версия алгоритма решения задачи № 6
+   * (Худшее -> O(n)) + O(n log2 n) Скорось работы аолгоритма. Версия алгоритма решения задачи № 6
    *
    * @return int
    */
@@ -33,8 +33,9 @@ class Task
       $i++;
       if ($i % $this->k === 0 && $key !== 0) {
         $max = $prepareMax % 2 === 0 ? max($max, $prepareMax) : $max;
-        $prepareMax -= $this->a[$key + 1 - $this->k];
-        $i--;
+//        $prepareMax -= $this->a[$key + 1 - $this->k];
+//        $i--;
+        break;
       }
     }
     return $max;
