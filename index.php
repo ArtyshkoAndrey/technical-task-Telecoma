@@ -8,6 +8,7 @@ class Task
 {
   private array $a;
   private int   $k;
+  public int $iter = 0;
 
   /**
    * Initial Data
@@ -24,10 +25,7 @@ class Task
    * @return int
    */
   public function result (): int {
-    $max = 0;
-    $prepareMax = 0;
     $this->shellSort();
-    $i = 0;
 
     $evenArray = [];
     $oddArray = [];
@@ -42,27 +40,27 @@ class Task
   }
 
   private function searchMax($evenArray, $oddArray) {
+//    var_dump($evenArray, $oddArray);
     $prepareAnswer = 0;
-    $arrayGetsOdd = [];
     $flagOdd = false;
-    $eventMaxNumCount = 0;
-    for ($i = 0; $i < max(count($oddArray), count($evenArray)); $i++) {
-      $maxElement = max($evenArray[$i], $oddArray[$i]);
-
-      if ($maxElement === $oddArray[$i]) {
+    $evenCounter = 0;
+    $oddCounter = 0;
+    for ($i = 0; $i <= $this->k; $i++) {
+      $maxElement = max($evenArray[$evenCounter], $oddArray[$oddCounter]);
+//      var_dump('Max = ' . $maxElement);
+//      var_dump('Even = ' . $evenArray[$evenCounter]);
+//      var_dump('Odd = ' . $oddArray[$oddCounter]);
+      $this->iter++;
+      if ($maxElement === $oddArray[$oddCounter]) {
         $flagOdd = !$flagOdd;
-        $arrayGetsOdd[] += $i;
+        $oddCounter++;
       } else {
-        if (count($arrayGetsOdd) > $eventMaxNumCount) {
-          $maxElement = $evenArray[$arrayGetsOdd[$eventMaxNumCount]];
-          $eventMaxNumCount++;
-        }
+        $evenCounter++;
       }
       $prepareAnswer += $maxElement;
-
       if ($i + 1 === $this->k) {
         if ($flagOdd) {
-          $prepareAnswer = $prepareAnswer - $oddArray[$arrayGetsOdd[0]] + $evenArray[$arrayGetsOdd[0]];
+          $prepareAnswer = $prepareAnswer - $oddArray[$oddCounter--] + $evenArray[$evenCounter];
         }
         return $prepareAnswer;
       }
@@ -84,6 +82,7 @@ class Task
     $gap[0] = (int) ($count / 2);
 
     while($gap[$k] > 1) {
+      $this->iter++;
       $k++;
       $gap[$k]= (int)($gap[$k-1] / 2);
     }
@@ -95,6 +94,7 @@ class Task
         $temp = $this->a[$j];
         $p = $j - $step;
         while($p >= 0 && $temp >  $this->a[$p]) {
+          $this->iter++;
           $this->a[$p + $step] =  $this->a[$p];
           $p                   -= $step;
         }
@@ -104,11 +104,15 @@ class Task
   }
 }
 
-//$task = new Task([9,17,21,14,16,14], 3);
-$task = new Task(range(0,10000), 500);
+$task = new Task([9,17,21,14,16,14], 3);
+//$task = new Task([1, 1, 1, 2], 4);
 
 $answer = $task->result();
-var_dump($answer);
+if ($answer < 0) {
+  var_dump('Нет решения');
+} else {
+  var_dump('Ответ = ' . $answer, 'Всего итераций: ' . $task->iter);
+}
 
 
 
