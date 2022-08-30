@@ -30,6 +30,7 @@ class Task
     $evenArray = [];
     $oddArray = [];
     foreach ($this->a as $item) {
+      $this->iter++;
       if ($item % 2 === 0) {
         $evenArray[] += $item;
       } else {
