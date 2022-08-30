@@ -19,7 +19,7 @@ class Task
   }
 
   /**
-   * (Худшее -> O(n)) + O(n log2 n) Скорось работы аолгоритма. Версия алгоритма решения задачи № 7
+   *
    *
    * @return int
    */
@@ -28,17 +28,48 @@ class Task
     $prepareMax = 0;
     $this->shellSort();
     $i = 0;
-    foreach ($this->a as $key => $item) {
-      $prepareMax += $item;
-      $i++;
-      if ($i % $this->k === 0 && $key !== 0) {
-        $max = $prepareMax % 2 === 0 ? max($max, $prepareMax) : $max;
-//        $prepareMax -= $this->a[$key + 1 - $this->k];
-//        $i--;
-        break;
+
+    $evenArray = [];
+    $oddArray = [];
+    foreach ($this->a as $item) {
+      if ($item % 2 === 0) {
+        $evenArray[] += $item;
+      } else {
+        $oddArray[] += $item;
       }
     }
-    return $max;
+    return $this->searchMax($evenArray, $oddArray);
+  }
+
+  private function searchMax($evenArray, $oddArray) {
+    $prepareAnswer = 0;
+    $arrayGetsOdd = [];
+    $flagOdd = false;
+    $eventMaxNumCount = 0;
+    for ($i = 0; $i < max(count($oddArray), count($evenArray)); $i++) {
+      $maxElement = max($evenArray[$i], $oddArray[$i]);
+
+      if ($maxElement === $oddArray[$i]) {
+        $flagOdd = !$flagOdd;
+        $arrayGetsOdd[] += $i;
+      } else {
+        if (count($arrayGetsOdd) > $eventMaxNumCount) {
+          $maxElement = $evenArray[$arrayGetsOdd[$eventMaxNumCount]];
+          $eventMaxNumCount++;
+        }
+      }
+      $prepareAnswer += $maxElement;
+
+      if ($i + 1 === $this->k) {
+        if ($flagOdd) {
+          $prepareAnswer = $prepareAnswer - $oddArray[$arrayGetsOdd[0]] + $evenArray[$arrayGetsOdd[0]];
+        }
+        return $prepareAnswer;
+      }
+    }
+    return -1;
+
+
   }
 
   /**
@@ -73,7 +104,8 @@ class Task
   }
 }
 
-$task = new Task([9,17,21,14,16,14], 3);
+//$task = new Task([9,17,21,14,16,14], 3);
+$task = new Task(range(0,10000), 500);
 
 $answer = $task->result();
 var_dump($answer);
