@@ -1,0 +1,12 @@
+{
+    "name": "artys/technical-task-telecoma",
+    "authors": [
+        {
+            "name": "Fulliton",
+            "email": "artyshko.andrey@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
